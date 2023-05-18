@@ -1,0 +1,134 @@
+
+drop schema if exists app2s3 cascade;
+CREATE SCHEMA app2s3;
+set search_path = app2s3, pg_catalog;
+
+CREATE TABLE Statut
+(
+    Nom VARCHAR(64) NOT NULL,
+    StatusID VARCHAR(64) NOT NULL,
+    PRIMARY KEY (StatusID)
+);
+
+CREATE TABLE Campus
+(
+    CampusID VARCHAR(64) NOT NULL,
+    nomCampus VARCHAR(64) NOT NULL,
+    PRIMARY KEY (CampusID)
+);
+
+CREATE TABLE Fonction
+(
+    FonctionID VARCHAR(16) NOT NULL,
+    nomFonction VARCHAR(128) NOT NULL,
+    PRIMARY KEY (FonctionID)
+);
+
+CREATE TABLE Caracterisique
+(
+    caracteristiqueID VARCHAR(16) NOT NULL,
+    nomCaracteristique VARCHAR(1024) NOT NULL,
+    PRIMARY KEY (caracteristiqueID)
+);
+
+CREATE TABLE Statut_privileges
+(
+    privileges VARCHAR(64) NOT NULL,
+    StatusID VARCHAR(64) NOT NULL,
+    PRIMARY KEY (privileges, StatusID),
+    FOREIGN KEY (StatusID) REFERENCES Statut(StatusID)
+);
+
+CREATE TABLE Pavillon
+(
+    PavillonID VARCHAR(16) NOT NULL,
+    nomPavillon VARCHAR(64) NOT NULL,
+    CampusID VARCHAR(64) NOT NULL,
+    PRIMARY KEY (PavillonID),
+    FOREIGN KEY (CampusID) REFERENCES Campus(CampusID)
+);
+
+CREATE TABLE Departement
+(
+    DepartementID VARCHAR(64) NOT NULL,
+    DepartementNom VARCHAR(128) NOT NULL,
+    PavillonID VARCHAR(16) NOT NULL,
+    PRIMARY KEY (DepartementID),
+    FOREIGN KEY (PavillonID) REFERENCES Pavillon(PavillonID)
+);
+
+CREATE TABLE Membre
+(
+    Cip VARCHAR(16) NOT NULL,
+    Prenom VARCHAR(64) NOT NULL,
+    Nom VARCHAR(64) NOT NULL,
+    DepartementID VARCHAR(64) NOT NULL,
+    PRIMARY KEY (Cip),
+    FOREIGN KEY (DepartementID) REFERENCES Departement(DepartementID)
+);
+
+CREATE TABLE StatutMembre
+(
+    StatusID VARCHAR(64) NOT NULL,
+    Cip VARCHAR(16) NOT NULL,
+    PRIMARY KEY (StatusID, Cip),
+    FOREIGN KEY (StatusID) REFERENCES Statut(StatusID),
+    FOREIGN KEY (Cip) REFERENCES Membre(Cip)
+);
+
+
+
+CREATE TABLE Local
+(
+    noCubicule INT NOT NULL,
+    NoLocal INT NOT NULL,
+    Capacite INT NOT NULL,
+    Notes VARCHAR(1024),
+    PavillonID VARCHAR(16) NOT NULL,
+    FonctionID VARCHAR(16) NOT NULL,
+    Compose_noCubicule INT,
+    PRIMARY KEY (noCubicule, NoLocal, PavillonID),
+    FOREIGN KEY (PavillonID) REFERENCES Pavillon(PavillonID),
+    FOREIGN KEY (FonctionID) REFERENCES Fonction(FonctionID),
+    FOREIGN KEY (Compose_noCubicule, NoLocal, PavillonID) REFERENCES Local(noCubicule, NoLocal, PavillonID)
+);
+
+
+CREATE TABLE Reservation
+(
+    date_fin DATE NOT NULL,
+    date_debut DATE NOT NULL,
+    ReservationID VARCHAR NOT NULL,
+    Date DATE NOT NULL,
+    Description VARCHAR(1024) NOT NULL,
+    Cip VARCHAR(16) NOT NULL,
+    noCubicule INT NOT NULL,
+    NoLocal INT NOT NULL,
+    PavillonID VARCHAR(16) NOT NULL,
+    PRIMARY KEY (ReservationID),
+    FOREIGN KEY (Cip) REFERENCES Membre(Cip),
+    FOREIGN KEY (noCubicule, NoLocal, PavillonID) REFERENCES Local(noCubicule, NoLocal, PavillonID)
+);
+
+CREATE TABLE log
+(
+    Idlog VARCHAR(64) NOT NULL,
+    Description VARCHAR(1024) NOT NULL,
+    date DATE NOT NULL,
+    Cip VARCHAR(16) NOT NULL,
+    ReservationID VARCHAR NOT NULL,
+    PRIMARY KEY (Idlog),
+    FOREIGN KEY (Cip) REFERENCES Membre(Cip),
+    FOREIGN KEY (ReservationID) REFERENCES Reservation(ReservationID)
+);
+
+CREATE TABLE CaracLocal
+(
+    caracteristiqueID VARCHAR(16) NOT NULL,
+    noCubicule INT NOT NULL,
+    NoLocal INT NOT NULL,
+    PavillonID VARCHAR(16) NOT NULL,
+    PRIMARY KEY (caracteristiqueID, noCubicule, NoLocal, PavillonID),
+    FOREIGN KEY (caracteristiqueID) REFERENCES Caracterisique(caracteristiqueID),
+    FOREIGN KEY (noCubicule, NoLocal, PavillonID) REFERENCES Local(noCubicule, NoLocal, PavillonID)
+);
