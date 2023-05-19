@@ -1,0 +1,79 @@
+
+drop schema if exists app2s3 cascade;
+CREATE SCHEMA app2s3;
+set search_path = app2s3, pg_catalog;
+CREATE TABLE Statut
+(
+    Nom VARCHAR(64) NOT NULL,
+    StatusID VARCHAR(32) NOT NULL,
+    PRIMARY KEY (StatusID)
+);
+
+CREATE TABLE Campus
+(
+    CampusID VARCHAR(128) NOT NULL,
+    nomCampus VARCHAR(128) NOT NULL,
+    PRIMARY KEY (CampusID)
+);
+
+CREATE TABLE Fonction
+(
+    FonctionID VARCHAR(64) NOT NULL,
+    nomFonction VARCHAR(512) NOT NULL,
+    PRIMARY KEY (FonctionID)
+);
+
+CREATE TABLE Caracteristique
+(
+    caracteristiqueID VARCHAR(64) NOT NULL,
+    nomCaracteristique VARCHAR(128) NOT NULL,
+    PRIMARY KEY (caracteristiqueID)
+);
+
+CREATE TABLE Statut_privileges
+(
+    privileges VARCHAR(1024) NOT NULL,
+    StatusID VARCHAR(32) NOT NULL,
+    PRIMARY KEY (privileges, StatusID),
+    FOREIGN KEY (StatusID) REFERENCES Statut(StatusID)
+);
+
+CREATE TABLE Pavillon
+(
+    PavillonID VARCHAR(16) NOT NULL,
+    nomPavillon VARCHAR(128) NOT NULL,
+    CampusID VARCHAR(128) NOT NULL,
+    PRIMARY KEY (PavillonID),
+    FOREIGN KEY (CampusID) REFERENCES Campus(CampusID)
+);
+
+CREATE TABLE Departement
+(
+    DepartementID VARCHAR(64) NOT NULL,
+    DepartementNom VARCHAR(128) NOT NULL,
+    PavillonID VARCHAR(16) NOT NULL,
+    PRIMARY KEY (DepartementID),
+    FOREIGN KEY (PavillonID) REFERENCES Pavillon(PavillonID)
+);
+
+CREATE TABLE Membre
+(
+    Cip VARCHAR(16) NOT NULL,
+    Prenom VARCHAR(64) NOT NULL,
+    Nom VARCHAR(128) NOT NULL,
+    DepartementID VARCHAR(64) NOT NULL,
+    PRIMARY KEY (Cip),
+    FOREIGN KEY (DepartementID) REFERENCES Departement(DepartementID)
+);
+
+CREATE TABLE Local
+(
+    IdLocal VARCHAR(64) NOT NULL,
+    Capacite INT NOT NULL,
+    Notes VARCHAR(1024),
+    PavillonID VARCHAR(16) NOT NULL,
+    FonctionID VARCHAR(64) NOT NULL,
+    PRIMARY KEY (IdLocal, PavillonID),
+    FOREIGN KEY (PavillonID) REFERENCES Pavillon(PavillonID),
+    FOREIGN KEY (FonctionID) REFERENCES Fonction(FonctionID)
+);
