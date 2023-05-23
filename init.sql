@@ -112,7 +112,6 @@ CREATE TABLE Reservation
     date_debut TIMESTAMP NOT NULL,
     date_fin TIMESTAMP NOT NULL,
     ReservationID VARCHAR(64) NOT NULL,
-    Date DATE NOT NULL,
     Description VARCHAR(1024) NOT NULL,
     Cip VARCHAR(16) NOT NULL,
     IdLocal VARCHAR(64) NOT NULL,
@@ -121,7 +120,7 @@ CREATE TABLE Reservation
     PRIMARY KEY (ReservationID),
     FOREIGN KEY (Cip) REFERENCES Membre(Cip),
     FOREIGN KEY (IdLocal, PavillonID) REFERENCES Local(IdLocal, PavillonID),
-    FOREIGN KEY (IdLocal, PavillonID, numCubicule)  REFERENCES Cubicule(numCubicule,IDLocal, PavillonID )
+    FOREIGN KEY (NumCubicule, IdLocal, PavillonID) REFERENCES Cubicule(NumCubicule, IdLocal, PavillonID)
 );
 
 ALTER TABLE Reservation ADD COLUMN is_deleted BOOLEAN NOT NULL DEFAULT FALSE;

@@ -241,8 +241,9 @@ INSERT INTO statutmembre VALUES (1,'lewj2003');
 INSERT INTO statutmembre VALUES (2,'robk2305');
 
 
-INSERT INTO RESERVATION VALUES ('1970-01-01 08:00:00','1970-01-01 08:30:00', 1, '1970-01-01', 'Premiere reserv', 'ronk2602','3014', 'C1');
-INSERT INTO RESERVATION VALUES ('2021-09-28 08:00:00','2021-09-28 10:00:00', 2, '2021-09-28','Faire des sql injections', 'robk1304','1007', 'C1');
-INSERT INTO RESERVATION VALUES ('2021-09-28 08:30:00','2021-09-28 10:00:00', 3, '2021-09-28','Travailler sur app3 s5', 'talr1202','2018', 'C1');
-INSERT INTO RESERVATION VALUES ('2021-09-28 09:00:00','2021-09-28 10:00:00', 4, '2021-09-28','Rencontre de projet', 'lewj1403','5012', 'C1');
+INSERT INTO RESERVATION VALUES ('1970-01-01 08:00:00','1970-01-01 08:30:00', 1, 'Premiere reserv', 'ronk2602','3014', 'C1');
+INSERT INTO RESERVATION VALUES ('2021-09-28 08:00:00','2021-09-28 10:00:00', 2,'Faire des sql injections', 'robk1304','1007', 'C1');
+INSERT INTO RESERVATION VALUES ('2021-09-28 08:30:00','2021-09-28 10:00:00', 3,'Travailler sur app3 s5', 'talr1202','2018', 'C1');
+--INSERT INTO RESERVATION VALUES ('2021-09-28 09:00:00','2021-09-28 10:00:00', 4,'Rencontre de projet', 'lewj1403','5012', 'C1');
+INSERT INTO reservation values ('2021-09-28 09:00:00','2021-09-28 10:00:00', 5, 'toute app cubicule 5','ronk2602', '5012', 'C1');
 UPDATE reservation SET is_deleted = TRUE WHERE reservationid = '2';
